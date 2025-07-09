@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import style from './ChatInput.module.css';
+
 
 function ChatInput({ onSendMessage }) {
   const [inputValue, setInputValue] = useState('');
@@ -12,7 +14,7 @@ function ChatInput({ onSendMessage }) {
   };
 
   return (
-    <form id="form" className="chat-input" onSubmit={handleSubmit}>
+    <form id="form" className={style.chat_input} onSubmit={handleSubmit}>
       <input
         id="input"
         type="text"

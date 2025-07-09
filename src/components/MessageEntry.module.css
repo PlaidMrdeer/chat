@@ -1,0 +1,70 @@
+.message_entry {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+}
+
+.other_entry {
+    align-self: flex-start;
+    align-items: flex-start;
+    /* 确保ID和时间也左对齐 */
+}
+
+.self_entry {
+    position: relative;
+    align-self: flex-end;
+    align-items: flex-end;
+    /* 确保ID和时间也右对齐 */
+}
+
+.you_label {
+    color: rgb(252, 95, 95);
+    font-size: 13px;
+    font-weight: bold;
+    user-select: none;
+    margin-bottom: 2px;
+    padding: 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.sender_id {
+    font-size: 13px;
+    margin-bottom: 3px;
+    padding: 0 2px;
+    user-select: none;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.message_bubble {
+    position: relative;
+    border-radius: 12px;
+    padding: 6px 10px;
+    word-break: break-word;
+    font-size: 15px;
+    line-height: 1.4;
+    max-width: 100%;
+}
+
+.other_bubble_style {
+    background-color: #4b4f58;
+    color: #f0f0f0;
+}
+.self_bubble_style {
+    background-color: #607d8b;
+    color: #fff;
+}
+
+.time {
+    font-size: 10px;
+    color: #a0a0a0;
+    margin-top: 4px;
+    padding: 0 2px;
+    user-select: none;
+}

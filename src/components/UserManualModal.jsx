@@ -1,12 +1,14 @@
+import style from './UserManualModal.module.css';
+
 function UserManualModal({ isOpen, onClose }) {
   if (!isOpen) {
     return null;
   }
 
   return (
-    <div id="manualModal" className="modal" style={{ display: 'block' }}>
-      <div className="modal-content">
-        <span className="close-button" id="closeManualModal" onClick={onClose}>×</span>
+    <div id="manualModal" className={style.modal} style={{ display: 'block' }}>
+      <div className={style.modal_content}>
+        <span className={style.close_button} id="closeManualModal" onClick={onClose}>×</span>
         <h2>用户手册</h2>
         <p><strong>欢迎来到匿名聊天室！</strong></p>
 

@@ -5,6 +5,8 @@ import ChatInput from "./components/ChatInput";
 import OnlineStatusBar from "./components/OnlineStatusBar";
 import UserManualModal from "./components/UserManualModal";
 
+import style from "./App.module.css";
+
 const SOCKET_SERVER_URL = "http://localhost:3000";
 
 function App() {
@@ -76,7 +78,7 @@ function App() {
 
   return (
     <>
-      <div className="chat-container">
+      <div className={style.chat_container}>
         <ChatBox messages={messages} />
         <ChatInput onSendMessage={handleSendMessage} />
       </div>

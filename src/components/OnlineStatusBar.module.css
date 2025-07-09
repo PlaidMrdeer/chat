@@ -1,0 +1,30 @@
+.online_status_bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35px;
+    background-color: #2a2b30;
+    color: #bbb;
+    font-size: 13px;
+    border-top: 1px solid #404040;
+    user-select: none;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    /* 增加一些内边距 */
+}
+
+.manual_link {
+    color: #8ab4f8;
+    /* 链接颜色 */
+    text-decoration: none;
+    margin-left: 15px;
+    /* 与在线人数的间距 */
+}
+
+.manual_link:hover {
+    text-decoration: underline;
+}

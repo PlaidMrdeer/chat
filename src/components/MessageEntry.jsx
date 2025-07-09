@@ -1,3 +1,6 @@
+import style from './MessageEntry.module.css';
+
+
 function MessageEntry({ message }) {
   const { senderId, text, time, isSelf } = message;
 
@@ -5,19 +8,22 @@ function MessageEntry({ message }) {
   const senderColor = getColorFromId(senderId);
 
   return (
-    <div className={`message-entry ${isSelf ? 'self-entry' : 'other-entry'}`}>
+    <div className={`${style.message_entry} ${isSelf ? style.self_entry : style.other_entry}`}>
       {isSelf && (
-        <div className="you-label">You</div>
+        <div className={style.you_label}>You</div>
       )}
+
       {!isSelf && (
-        <div className="sender-id" style={{ color: senderColor }}>
+        <div className={style.sender_id} style={{ color : senderColor }}>
           {senderId}
         </div>
       )}
-      <div className={`message-bubble ${isSelf ? 'self-bubble-style' : 'other-bubble-style'}`}>
+
+      <div className={`${style.message_bubble} ${isSelf ? style.self_bubble_style : style.other_bubble_style}`}>
         {text}
       </div>
-      <div className="time">{new Date(time).toLocaleTimeString()}</div>
+
+      <div className={style.time}>{new Date(time).toLocaleTimeString()}</div>
     </div>
 
   );
