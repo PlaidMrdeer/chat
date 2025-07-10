@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react';
 import MessageEntry from './MessageEntry';
 import style from './ChatBox.module.css';
 
-function ChatBox({ messages }) {
+// <--- 修改: 接收 onImageZoom prop --->
+function ChatBox({ messages, onImageZoom }) {
   const chatBoxRef = useRef(null);
 
   // Create a function to scroll to the bottom
@@ -25,6 +26,8 @@ function ChatBox({ messages }) {
           message={msg}
           // Pass the scroll function as a prop
           onImageLoad={scrollToBottom} 
+          // <--- 修改: 将 onImageZoom prop 传递给 MessageEntry --->
+          onImageZoom={onImageZoom}
         />
       ))}
     </div>

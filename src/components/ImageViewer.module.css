@@ -1,0 +1,37 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001; /* 确保在最上层 */
+  cursor: zoom-out;
+}
+
+.zoomed_image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.close_button {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.close_button:hover {
+  color: #ccc;
+}

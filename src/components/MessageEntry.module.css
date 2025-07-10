@@ -72,6 +72,13 @@
   max-width: 200px;
   border-radius: 8px;
   display: block;
+  cursor: zoom-in; /* <--- 新增: 鼠标悬停时显示放大光标 */
+  transition: opacity 0.2s;
+}
+
+/* <--- 新增: 悬停效果 (可选) ---> */
+.image_preview:hover {
+  opacity: 0.8;
 }
 
 /* 下载链接样式 */
@@ -81,8 +88,6 @@
   word-break: break-all;
   display: inline-block;
 }
-
-/* ... 其他样式保持不变 ... */
 
 .file_container {
   display: flex;
@@ -115,4 +120,3 @@
   border-radius: 3px;
   transition: width 0.1s linear;
 }
-

@@ -1,6 +1,7 @@
 import style from "./MessageEntry.module.css";
 
-function MessageEntry({ message, onImageLoad }) {
+// <--- 修改: 接收 onImageZoom prop --->
+function MessageEntry({ message, onImageLoad, onImageZoom }) {
   const {
     senderId,
     text,
@@ -43,8 +44,9 @@ function MessageEntry({ message, onImageLoad }) {
                 src={fileUrl}
                 alt={fileName}
                 className={style.image_preview}
-                // Add the onLoad event handler to the img tag
                 onLoad={onImageLoad}
+                // <--- 新增: 点击图片时调用 onImageZoom 函数 --->
+                onClick={() => onImageZoom(fileUrl)}
               />
             ) : (
               <a
