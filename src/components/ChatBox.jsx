@@ -1,21 +1,31 @@
 import { useEffect, useRef } from 'react';
 import MessageEntry from './MessageEntry';
-
 import style from './ChatBox.module.css';
 
 function ChatBox({ messages }) {
   const chatBoxRef = useRef(null);
 
-  useEffect(() => {
+  // Create a function to scroll to the bottom
+  const scrollToBottom = () => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
+  };
+
+  useEffect(() => {
+    // Scroll to bottom every time the messages array changes
+    scrollToBottom();
   }, [messages]);
 
   return (
     <div id="chat" className={style.chat_box} ref={chatBoxRef}>
       {messages.map((msg, index) => (
-        <MessageEntry key={msg.id || `${msg.senderId}-${msg.time}-${index}`} message={msg} />
+        <MessageEntry
+          key={msg.id || `${msg.senderId}-${msg.time}-${index}`}
+          message={msg}
+          // Pass the scroll function as a prop
+          onImageLoad={scrollToBottom} 
+        />
       ))}
     </div>
   );

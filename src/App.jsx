@@ -7,26 +7,32 @@ import UserManualModal from "./components/UserManualModal";
 
 import style from "./App.module.css";
 
+// --- 配置常量 ---
 const SOCKET_SERVER_URL = "http://localhost:3000";
+const CHUNK_SIZE = 256 * 1024;
 
 function App() {
+  // --- State Hooks ---
   const [messages, setMessages] = useState([]);
   const [onlineCount, setOnlineCount] = useState(0);
   const [socket, setSocket] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [incomingFiles, setIncomingFiles] = useState({});
+
+  // --- Ref Hooks ---
   const messageSoundRef = useRef(null);
 
+  // --- Effects ---
   useEffect(() => {
     messageSoundRef.current = document.getElementById("messageSound");
+    // const newSocket = io(SOCKET_SERVER_URL, { withCredentials: true });
 
-    const newSocket = io(SOCKET_SERVER_URL, {
-      withCredentials: true
-    });
-
-    // const newSocket = io();
+    const newSocket = io();
     setSocket(newSocket);
 
+    // --- Socket.IO 事件监听 ---
     newSocket.on("connect", () => {
       console.log("连接成功，ID:", newSocket.id);
       setCurrentUserId(newSocket.id);
@@ -42,9 +48,7 @@ function App() {
         },
       ]);
       if (messageSoundRef.current && msg.senderId !== newSocket.id) {
-        messageSoundRef.current.play().catch((error) => {
-          console.warn("音频播放失败:", error);
-        });
+        messageSoundRef.current.play().catch(console.warn);
       }
     });
 
@@ -52,35 +56,164 @@ function App() {
       setOnlineCount(count);
     });
 
-    newSocket.on("disconnect", () => {
-      console.log("已断开连接");
+    newSocket.on("disconnect", (reason) => {
+      console.log("已断开连接:", reason);
     });
 
+    // --- 文件分片传输事件监听 ---
+    newSocket.on('file-start', ({ id, name, type, size, senderId }) => {
+      console.log(`[File] 开始接收文件: ${name}`);
+      
+      setIncomingFiles(prev => ({
+        ...prev,
+        [id]: { id, name, type, size, senderId, chunks: [], receivedSize: 0 },
+      }));
+
+      setMessages(prev => [...prev, {
+        id: id,
+        senderId: senderId,
+        fileName: name,
+        fileType: type,
+        time: Date.now(),
+        isSelf: false,
+        status: 'downloading',
+        progress: 0,
+      }]);
+    });
+
+    newSocket.on('file-chunk', ({ id, chunk }) => {
+      setIncomingFiles(prev => {
+        const file = prev[id];
+        if (!file) return prev;
+        
+        file.chunks.push(chunk);
+        file.receivedSize += chunk.byteLength;
+        
+        const progress = Math.round((file.receivedSize / file.size) * 100);
+
+        setMessages(msgs => msgs.map(msg => 
+          msg.id === id ? { ...msg, progress: progress } : msg
+        ));
+
+        // Important: return the modified state
+        return { ...prev, [id]: file };
+      });
+    });
+
+    newSocket.on('file-end', ({ id }) => {
+      setIncomingFiles(prevIncomingFiles => {
+        const fileData = prevIncomingFiles[id];
+        if (!fileData) {
+            console.error(`[File] 收到结束信号，但未找到文件信息: ${id}`);
+            return prevIncomingFiles;
+        }
+
+        console.log(`[File] 文件接收完成: ${fileData.name}`);
+
+        if (fileData.receivedSize !== fileData.size) {
+            console.error(`[File] 文件传输不完整: ${fileData.name}.`);
+            setMessages(msgs => msgs.map(msg => 
+                msg.id === id ? { ...msg, status: 'error', progress: 0 } : msg
+            ));
+        } else {
+            const fileBlob = new Blob(fileData.chunks, { type: fileData.type });
+            const fileUrl = URL.createObjectURL(fileBlob);
+
+            setMessages(msgs => msgs.map(msg => 
+              msg.id === id ? { ...msg, fileUrl, status: 'complete', progress: 100 } : msg
+            ));
+
+            if (messageSoundRef.current) {
+                messageSoundRef.current.play().catch(console.warn);
+            }
+        }
+        
+        const { [id]: _, ...rest } = prevIncomingFiles;
+        return rest;
+      });
+    });
+
+    // --- 清理函数 ---
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, []); // Empty dependency array ensures this effect runs only once
 
+  // --- 事件处理函数 ---
   const handleSendMessage = (text) => {
     if (socket && text.trim()) {
-      const messageData = {
-        senderId: currentUserId,
-        text: text,
-        time: Date.now(),
-      };
+      const messageData = { senderId: currentUserId, text: text, time: Date.now() };
       socket.emit("chat message", messageData);
     }
   };
 
-  const toggleUserManualModal = () => {
-    setIsManualModalOpen(!isManualModalOpen);
+  const handleSendFile = (file) => {
+    if (!socket || !file || !currentUserId) return;
+
+    const fileId = `${currentUserId}-${file.name}-${Date.now()}`;
+    const localFileUrl = URL.createObjectURL(file);
+
+    setMessages(prevMessages => [...prevMessages, {
+        id: fileId,
+        senderId: currentUserId,
+        fileUrl: localFileUrl,
+        fileName: file.name,
+        fileType: file.type,
+        time: Date.now(),
+        isSelf: true,
+        status: 'uploading',
+        progress: 0,
+    }]);
+
+    socket.emit('file-start', {
+      id: fileId,
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      senderId: currentUserId,
+    });
+
+    const reader = new FileReader();
+    let offset = 0;
+
+    reader.onload = (e) => {
+      if (!e.target.result) return;
+      socket.emit('file-chunk', { id: fileId, chunk: e.target.result });
+      
+      offset += e.target.result.byteLength;
+      const progress = Math.round((offset / file.size) * 100);
+
+      setMessages(msgs => msgs.map(msg => 
+        msg.id === fileId ? { ...msg, progress } : msg
+      ));
+      
+      if (offset < file.size) {
+        readNextChunk();
+      } else {
+        console.log(`[File] 文件发送完成: ${file.name}`);
+        socket.emit('file-end', { id: fileId });
+        setMessages(msgs => msgs.map(msg => 
+          msg.id === fileId ? { ...msg, status: 'complete', progress: 100 } : msg
+        ));
+      }
+    };
+    
+    const readNextChunk = () => {
+      const slice = file.slice(offset, offset + CHUNK_SIZE);
+      reader.readAsArrayBuffer(slice);
+    };
+
+    readNextChunk();
   };
 
+  const toggleUserManualModal = () => setIsManualModalOpen(!isManualModalOpen);
+
+  // --- JSX 渲染 ---
   return (
     <>
       <div className={style.chat_container}>
         <ChatBox messages={messages} />
-        <ChatInput onSendMessage={handleSendMessage} />
+        <ChatInput onSendMessage={handleSendMessage} onSendFile={handleSendFile} />
       </div>
       <OnlineStatusBar onlineCount={onlineCount} onShowManual={toggleUserManualModal} />
       <UserManualModal isOpen={isManualModalOpen} onClose={toggleUserManualModal} />

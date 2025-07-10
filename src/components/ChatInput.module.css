@@ -9,10 +9,17 @@
     flex-shrink: 0;
 }
 
-.chat_input input {
+.input_wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.input_wrapper input[type="text"] {
     flex: 1;
     height: 38px;
-    padding: 0 12px;
+    padding: 0 36px 0 12px; /* 预留右边加号空间 */
     border: 1px solid #555;
     border-radius: 6px;
     background-color: #42454d;
@@ -20,8 +27,22 @@
     font-size: 15px;
 }
 
-.chat_input input::placeholder {
+.input_wrapper input::placeholder {
     color: #999;
+}
+
+.plus_button {
+    position: absolute;
+    right: 8px;
+    font-size: 20px;
+    color: #ccc;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+.plus_button:hover {
+    color: #fff;
 }
 
 .chat_input button {
