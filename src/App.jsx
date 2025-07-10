@@ -27,9 +27,9 @@ function App() {
   // --- Effects ---
   useEffect(() => {
     messageSoundRef.current = document.getElementById("messageSound");
-    // const newSocket = io(SOCKET_SERVER_URL, { withCredentials: true });
+    const newSocket = io(SOCKET_SERVER_URL, { withCredentials: true });
 
-    const newSocket = io();
+    // const newSocket = io();
     setSocket(newSocket);
 
     // --- Socket.IO 事件监听 ---

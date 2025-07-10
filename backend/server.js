@@ -1,30 +1,30 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-// const cors = require('cors');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
 
-// app.use(cors({
-//   origin: "http://localhost:5173",
-//   credentials: true,
-// }));
-
-// const io = new Server(server, {
-//   cors: {
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   },
-// });
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 
 const io = new Server(server, {
   cors: {
-    origin: "https://yunoun.eu.org", 
-    methods: ["GET", "POST"],
+    origin: "http://localhost:5173",
     credentials: true,
   },
 });
+
+// const io = new Server(server, {
+//   cors: {
+//     origin: "https://yunoun.eu.org", 
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   },
+// });
 
 let onlineUsers = 0;
 
