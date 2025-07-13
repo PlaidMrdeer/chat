@@ -17,12 +17,23 @@
     /* 增加一些内边距 */
 }
 
+/* 新增购买链接样式 */
+.purchase_link {
+    color: #f8c98a; /* 金色 */
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.purchase_link:hover {
+    text-decoration: underline;
+}
+
 .manual_link {
     color: #8ab4f8;
     /* 链接颜色 */
     text-decoration: none;
     margin-left: 15px;
-    /* 与在线人数的间距 */
+    /* 与购买令牌的间距 */
 }
 
 .manual_link:hover {

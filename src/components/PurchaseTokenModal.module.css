@@ -1,0 +1,124 @@
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1002; /* 确保在其他元素之上 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding-top: 50px;
+}
+
+.modal_content {
+    background-color: #383a40;
+    color: #f0f0f0;
+    margin: 5% auto;
+    padding: 20px 25px 25px 25px;
+    border: 1px solid #555;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.modal_content h2 {
+    margin-top: 0;
+    color: #f8c98a; /* 金色标题 */
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.modal_content h4 {
+    color: #b0bac0;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.modal_content p {
+    margin-bottom: 15px;
+}
+
+.close_button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 32px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close_button:hover,
+.close_button:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.qr_container {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: white;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.qr_code_image {
+    display: block;
+    width: 180px;
+    height: 180px;
+}
+
+.address_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #2e2f33;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    margin-top: 5px;
+}
+
+.crypto_address {
+    color: #cdd2d8;
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 1em;
+    margin: 0;
+}
+
+.copy_button {
+    padding: 5px 10px;
+    background-color: #607d8b;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.copy_button:hover {
+    background-color: #546e7a;
+}
+
+.warning {
+    font-size: 14px;
+    color: #ffb3b3;
+    margin-top: 20px;
+}
+
+.warning strong {
+    color: #ffcccc;
+}

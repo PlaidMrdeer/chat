@@ -4,7 +4,8 @@ import ChatBox from "./components/ChatBox";
 import ChatInput from "./components/ChatInput";
 import OnlineStatusBar from "./components/OnlineStatusBar";
 import UserManualModal from "./components/UserManualModal";
-import ImageViewer from "./components/ImageViewer"; // <--- 新增: 引入图片查看器
+import ImageViewer from "./components/ImageViewer";
+import PurchaseTokenModal from "./components/PurchaseTokenModal"; // <--- 引入新组件
 
 import style from "./App.module.css";
 
@@ -19,20 +20,20 @@ function App() {
   const [socket, setSocket] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
-  const [zoomedImageUrl, setZoomedImageUrl] = useState(null); // <--- 新增: 用于存储放大图片的URL
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false); // <--- 为新模态框添加 state
+  const [zoomedImageUrl, setZoomedImageUrl] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [incomingFiles, setIncomingFiles] = useState({});
 
   // --- Ref Hooks ---
   const messageSoundRef = useRef(null);
 
-  // --- Effects ---
-  // useEffect 钩子内的所有代码保持不变，这里省略以保持简洁...
+  // --- Effects (保持不变) ---
   useEffect(() => {
     messageSoundRef.current = document.getElementById("messageSound");
     const newSocket = io(SOCKET_SERVER_URL, { withCredentials: true });
     setSocket(newSocket);
-    // ... 所有 socket.on(...) 监听器都保持原样 ...
+    
     newSocket.on("connect", () => {
       console.log("连接成功，ID:", newSocket.id);
       setCurrentUserId(newSocket.id);
@@ -189,15 +190,14 @@ function App() {
   };
 
   const toggleUserManualModal = () => setIsManualModalOpen(!isManualModalOpen);
+  const togglePurchaseModal = () => setIsPurchaseModalOpen(!isPurchaseModalOpen); // <--- 新增的切换函数
 
-  // <--- 新增: 处理图片放大的函数 ---
   const handleImageZoom = (url) => {
     if (url) {
       setZoomedImageUrl(url);
     }
   };
 
-  // <--- 新增: 处理关闭图片放大的函数 ---
   const handleCloseZoom = () => {
     setZoomedImageUrl(null);
   };
@@ -206,7 +206,6 @@ function App() {
   return (
     <>
       <div className={style.chat_container}>
-        {/* <--- 修改: 传递 onImageZoom prop ---> */}
         <ChatBox messages={messages} onImageZoom={handleImageZoom} />
         <ChatInput
           onSendMessage={handleSendMessage}
@@ -216,13 +215,19 @@ function App() {
       <OnlineStatusBar
         onlineCount={onlineCount}
         onShowManual={toggleUserManualModal}
+        onShowPurchase={togglePurchaseModal} // <--- 传递新的 prop
       />
       <UserManualModal
         isOpen={isManualModalOpen}
         onClose={toggleUserManualModal}
       />
 
-      {/* <--- 新增: 条件渲染图片查看器 ---> */}
+      {/* 条件渲染购买令牌模态框 */}
+      <PurchaseTokenModal
+        isOpen={isPurchaseModalOpen}
+        onClose={togglePurchaseModal}
+      />
+
       {zoomedImageUrl && (
         <ImageViewer imageUrl={zoomedImageUrl} onClose={handleCloseZoom} />
       )}
