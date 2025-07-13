@@ -9,13 +9,6 @@ function PurchaseTokenModal({ isOpen, onClose }) {
     return null;
   }
 
-  // 点击背景关闭模态框
-  const handleBackgroundClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   // 复制地址到剪贴板
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(CRYPTO_ADDRESS).then(() => {
@@ -27,7 +20,7 @@ function PurchaseTokenModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className={style.modal} onClick={handleBackgroundClick}>
+    <div className={style.modal}>
       {/* 点击内容区域时阻止事件冒泡，防止关闭模态框 */}
       <div className={style.modal_content} onClick={(e) => e.stopPropagation()}>
         <span className={style.close_button} onClick={onClose}>×</span>
