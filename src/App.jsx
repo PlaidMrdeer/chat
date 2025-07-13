@@ -5,7 +5,8 @@ import ChatInput from "./components/ChatInput";
 import OnlineStatusBar from "./components/OnlineStatusBar";
 import UserManualModal from "./components/UserManualModal";
 import ImageViewer from "./components/ImageViewer";
-import PurchaseTokenModal from "./components/PurchaseTokenModal"; // <--- 引入新组件
+import PurchaseTokenModal from "./components/PurchaseTokenModal";
+import Sidebar from "./components/Sidebar"; // <-- 引入 Sidebar
 
 import style from "./App.module.css";
 
@@ -20,15 +21,18 @@ function App() {
   const [socket, setSocket] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
-  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false); // <--- 为新模态框添加 state
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [zoomedImageUrl, setZoomedImageUrl] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [incomingFiles, setIncomingFiles] = useState({});
 
+  // --- 新增 State 用于控制侧边栏 ---
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   // --- Ref Hooks ---
   const messageSoundRef = useRef(null);
 
-  // --- Effects (保持不变) ---
+  // --- Effects ---
   useEffect(() => {
     messageSoundRef.current = document.getElementById("messageSound");
     // const newSocket = io(SOCKET_SERVER_URL, { withCredentials: true });
@@ -191,7 +195,8 @@ function App() {
   };
 
   const toggleUserManualModal = () => setIsManualModalOpen(!isManualModalOpen);
-  const togglePurchaseModal = () => setIsPurchaseModalOpen(!isPurchaseModalOpen); // <--- 新增的切换函数
+  const togglePurchaseModal = () => setIsPurchaseModalOpen(!isPurchaseModalOpen);
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen); // <-- 新增的侧边栏切换函数
 
   const handleImageZoom = (url) => {
     if (url) {
@@ -213,17 +218,27 @@ function App() {
           onSendFile={handleSendFile}
         />
       </div>
+
       <OnlineStatusBar
         onlineCount={onlineCount}
         onShowManual={toggleUserManualModal}
-        onShowPurchase={togglePurchaseModal} // <--- 传递新的 prop
+        onShowPurchase={togglePurchaseModal}
+        onToggleSidebar={toggleSidebar} // <-- 将切换函数传递给状态栏
       />
+
+      {/* 渲染新的 Sidebar 组件 */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={toggleSidebar}
+        onShowManual={toggleUserManualModal}
+        onShowPurchase={togglePurchaseModal}
+      />
+
       <UserManualModal
         isOpen={isManualModalOpen}
         onClose={toggleUserManualModal}
       />
 
-      {/* 条件渲染购买令牌模态框 */}
       <PurchaseTokenModal
         isOpen={isPurchaseModalOpen}
         onClose={togglePurchaseModal}

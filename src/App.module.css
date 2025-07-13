@@ -1,17 +1,31 @@
+/* 基础样式 (移动端优先): 聊天容器占据整个屏幕，为底部状态栏留出空间 */
 .chat_container {
     position: fixed;
-    top: 15vh;
-    bottom: 25vh;
-    /* 调整为在线状态栏腾出空间 */
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 500px;
-    width: calc(100% - 20px);
+    top: 0;
+    /* 为底部 35px 高的 OnlineStatusBar 留出空间 */
+    bottom: 35px;
+    left: 0;
+    width: 100%;
     background-color: #383a40;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: none;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 0;
     z-index: 999;
+}
+
+/* 桌面端样式: 当屏幕宽度大于 520px 时应用以下样式 */
+@media (min-width: 521px) {
+    .chat_container {
+        /* 恢复您原有的桌面端布局 */
+        top: 15vh;
+        bottom: 25vh;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 500px;
+        width: calc(100% - 20px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+    }
 }

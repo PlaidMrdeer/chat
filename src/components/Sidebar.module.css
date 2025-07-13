@@ -1,0 +1,79 @@
+
+/* 遮罩层 */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1099; /* 确保在主内容之上，侧边栏之下 */
+}
+
+/* 侧边栏容器 */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    max-width: 80vw;
+    height: 100%;
+    background-color: #383a40;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    z-index: 1100;
+    transform: translateX(100%); /* 默认隐藏在屏幕右侧 */
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 当侧边栏打开时，将其移回屏幕内 */
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #4f535c;
+}
+
+.sidebar_header h3 {
+    margin: 0;
+    color: #f0f0f0;
+}
+
+.close_button {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close_button:hover {
+    color: #fff;
+}
+
+.sidebar_nav {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar_link {
+    color: #cdd2d8;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 0;
+    transition: color 0.2s;
+    line-height: 1.5; /* 确保长文本换行后有足够的行距 */
+}
+
+.sidebar_link:hover {
+    color: #8ab4f8;
+}

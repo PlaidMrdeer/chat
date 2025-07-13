@@ -1,3 +1,4 @@
+
 .online_status_bar {
     position: fixed;
     bottom: 0;
@@ -11,31 +12,32 @@
     user-select: none;
     z-index: 1000;
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 0 10px;
-    /* 增加一些内边距 */
+    /* 默认两端对齐，在移动端和桌面端都适用 */
+    justify-content: space-between;
+    padding: 0 15px;
 }
 
-/* 新增购买链接样式 */
-.purchase_link {
-    color: #f8c98a; /* 金色 */
+/* links_container 只在桌面端显示 */
+.links_container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.purchase_link, .manual_link {
     text-decoration: none;
-    margin-left: 15px;
+    white-space: nowrap;
 }
 
-.purchase_link:hover {
-    text-decoration: underline;
+.purchase_link {
+    color: #f8c98a;
 }
 
 .manual_link {
     color: #8ab4f8;
-    /* 链接颜色 */
-    text-decoration: none;
-    margin-left: 15px;
-    /* 与购买令牌的间距 */
 }
 
-.manual_link:hover {
+.purchase_link:hover, .manual_link:hover {
     text-decoration: underline;
 }

@@ -1,0 +1,16 @@
+
+
+.hamburger_button {
+    background: none;
+    border: none;
+    color: #f0f0f0;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.hamburger_button:hover {
+    color: #8ab4f8;
+}
