@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import style from "./PurchaseTokenModal.module.css";
-
 // 假设二维码图片位于 public/images/qr-code.png
 const QR_CODE_IMAGE_PATH = "/qr_code.png";
 
@@ -16,7 +15,7 @@ function PurchaseTokenModal({ isOpen, onClose }) {
       setError(null);
       setPaymentDetails(null); // 重置状态
 
-      fetch("http://localhost:3000/api/get-payment-details") // 确保URL与你的后端地址一致
+      fetch("/api/get-payment-details") // 确保URL与你的后端地址一致
         .then((res) => {
           if (!res.ok) {
             throw new Error("无法获取支付信息，请稍后重试。");
