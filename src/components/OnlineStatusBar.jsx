@@ -12,7 +12,7 @@ function OnlineStatusBar({ onlineCount, onShowManual, onShowPurchase }) {
       </a>
 
       <a href="#" className={style.manual_link} onClick={(e) => { e.preventDefault(); onShowManual(); }}>
-        用户手册
+        用户手册（务必查看，避免您在不知情的情况下被封禁）
       </a>
     </div>
   );
